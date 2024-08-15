@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\AttendanceResource\Pages;
 use App\Filament\Resources\AttendanceResource\RelationManagers;
 use App\Models\Attendance;
+use App\Models\Employee;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -23,9 +24,14 @@ class AttendanceResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('employee_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\Select::make('employee_id')
+                    ->label('Employee')
+                    ->options(function (callable $get) {
+                        return Employee::all()->pluck('user.name', 'id');
+                    })
+                    ->searchable()
+                    ->reactive()
+                    ->required(),
                 Forms\Components\DatePicker::make('date')
                     ->required(),
                 Forms\Components\TextInput::make('check_in')
@@ -38,8 +44,7 @@ class AttendanceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('employee_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('employee.name')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('date')
                     ->date()
