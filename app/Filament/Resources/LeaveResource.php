@@ -30,7 +30,7 @@ class LeaveResource extends Resource
                     ->required(),
                 Forms\Components\DatePicker::make('start_date')
                     ->required(),
-                Forms\Components\DatePicker::make('end_date')
+                Forms\Components\DatePicker::make('end_date')->afterOrEqual('start_date')
                     ->required(),
                 Forms\Components\Textarea::make('reason')
                     ->required()
@@ -44,7 +44,7 @@ class LeaveResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('employee_id')
+                Tables\Columns\TextColumn::make('employee.user.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')
