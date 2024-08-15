@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('positions', function (Blueprint $table) {
             $table->id();
+            $table->string('title')->unique();
+            $table->decimal('min_salary', 10, 2);
+            $table->decimal('max_salary', 10, 2);
             $table->timestamps();
         });
+
     }
 
     /**
