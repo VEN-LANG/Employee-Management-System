@@ -6,13 +6,16 @@ use App\Filament\Resources\AttendanceResource\Pages;
 use App\Filament\Resources\AttendanceResource\RelationManagers;
 use App\Models\Attendance;
 use App\Models\Employee;
+use Closure;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class AttendanceResource extends Resource
 {
@@ -29,6 +32,19 @@ class AttendanceResource extends Resource
                     ->options(function (callable $get) {
                         return Employee::all()->pluck('user.name', 'id');
                     })
+                    ->rules([
+                        function () {
+                            return function (string $attribute, $value, Closure $fail) {
+                                $today_attendance = (new Attendance())->query()->where('employee_id', $value)->whereBetween('date', [now()->startOfDay(), now()->endOfDay()])->first();
+                                if ($today_attendance) {
+                                    Notification::make()->warning()
+                                        ->title('Employee already attendance today')
+                                        ->body(''.(Employee::where('id',$value)->first()->user->name).' already checked in today.')->broadcast(Auth::user())->send();
+                                    $fail('This :attribute is already checked in today.');
+                                }
+                            };
+                        },
+                    ])
                     ->searchable()
                     ->reactive()
                     ->required(),
