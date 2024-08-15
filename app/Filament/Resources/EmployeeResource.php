@@ -4,7 +4,10 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\EmployeeResource\Pages;
 use App\Filament\Resources\EmployeeResource\RelationManagers;
+use App\Models\Department;
 use App\Models\Employee;
+use App\Models\Position;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -23,22 +26,38 @@ class EmployeeResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('user_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\Select::make('user_id')
+                    ->label('User')
+                    ->options(function (callable $get) {
+                        return User::all()->pluck('name', 'id');
+                    })
+                    ->searchable()
+                    ->reactive()
+                    ->required(),
                 Forms\Components\TextInput::make('phone_number')
                     ->tel()
                     ->required(),
-                Forms\Components\TextInput::make('position')
+                Forms\Components\Select::make('position_id')
+                    ->label('Position')
+                    ->options(function (callable $get) {
+                        return Position::all()->pluck('title', 'id');
+                    })
+                    ->searchable()
+                    ->reactive()
                     ->required(),
                 Forms\Components\TextInput::make('salary')
                     ->required()
                     ->numeric(),
                 Forms\Components\DatePicker::make('date_of_joining')
                     ->required(),
-                Forms\Components\TextInput::make('department_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\Select::make('department_id')
+                    ->label('Department')
+                    ->options(function (callable $get) {
+                        return Department::all()->pluck('name', 'id');
+                    })
+                    ->searchable()
+                    ->reactive()
+                    ->required(),
             ]);
     }
 
@@ -46,12 +65,12 @@ class EmployeeResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_id')
+                Tables\Columns\TextColumn::make('user.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('phone_number')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('position')
+                Tables\Columns\TextColumn::make('position.title')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('salary')
                     ->numeric()
@@ -59,7 +78,7 @@ class EmployeeResource extends Resource
                 Tables\Columns\TextColumn::make('date_of_joining')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('department_id')
+                Tables\Columns\TextColumn::make('department.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
