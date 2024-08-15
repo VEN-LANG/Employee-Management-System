@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('salary', 10, 2);
             $table->date('date_of_joining');
             $table->unsignedBigInteger('department_id');
+            $table->softDeletes();
             $table->timestamps();
 
             // Foreign key constraints

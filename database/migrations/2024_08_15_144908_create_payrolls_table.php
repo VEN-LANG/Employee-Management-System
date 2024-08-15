@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('deductions', 10, 2)->default(0);
             $table->decimal('net_salary', 10, 2);
             $table->date('payment_date');
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');

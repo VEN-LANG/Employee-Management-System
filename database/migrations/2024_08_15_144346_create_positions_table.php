@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title')->unique();
             $table->decimal('min_salary', 10, 2);
             $table->decimal('max_salary', 10, 2);
+            $table->softDeletes();
             $table->timestamps();
         });
 

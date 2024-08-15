@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('date');
             $table->time('check_in');
             $table->time('check_out')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');

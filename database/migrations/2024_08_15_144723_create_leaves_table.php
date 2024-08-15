@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('end_date');
             $table->text('reason');
             $table->string('status')->default('pending');
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');

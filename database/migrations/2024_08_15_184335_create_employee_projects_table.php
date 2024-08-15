@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('employee_id');
             $table->unsignedBigInteger('project_id');
+            $table->softDeletes();
             $table->timestamps();
 
             // Foreign key constraints
