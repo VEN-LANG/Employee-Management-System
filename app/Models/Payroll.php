@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms;
+use Filament\Tables;
+
 class Payroll extends Model
 {
     use HasFactory;
@@ -96,5 +98,40 @@ class Payroll extends Model
                     ->label('Payment Date')
                     ->required(),
             ];
+    }
+
+    public static function resourceTable(): array
+    {
+        return [
+            Tables\Columns\TextColumn::make('employee.name')
+                ->label('Employee')
+                ->sortable()
+                ->searchable(),
+
+            Tables\Columns\TextColumn::make('basic_salary')
+                ->label('Basic Salary')
+                ->sortable()
+                ->searchable(),
+
+            Tables\Columns\TextColumn::make('allowances')
+                ->label('Allowances')
+                ->sortable()
+                ->searchable(),
+
+            Tables\Columns\TextColumn::make('deductions')
+                ->label('Deductions')
+                ->sortable()
+                ->searchable(),
+
+            Tables\Columns\TextColumn::make('net_salary')
+                ->label('Net Salary')
+                ->sortable()
+                ->searchable(),
+
+            Tables\Columns\TextColumn::make('payment_date')
+                ->label('Payment Date')
+                ->date()
+                ->sortable(),
+        ];
     }
 }

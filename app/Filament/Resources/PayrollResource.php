@@ -4,8 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PayrollResource\Pages;
 use App\Filament\Resources\PayrollResource\RelationManagers;
+use App\Models\Employee;
 use App\Models\Payroll;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -22,17 +22,17 @@ class PayrollResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                //
-            ]);
+            ->schema(Payroll::resourceForm());
     }
+
 
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
+            ->columns(
                 //
-            ])
+                Payroll::resourceTable()
+            )
             ->filters([
                 //
             ])
