@@ -4,14 +4,18 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\LeaveResource\Pages;
 use App\Filament\Resources\LeaveResource\RelationManagers;
+use App\Models\Employee;
 use App\Models\Leave;
+use Closure;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class LeaveResource extends Resource
 {
@@ -23,9 +27,27 @@ class LeaveResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('employee_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\Select::make('employee_id')
+                        ->label('Employee')
+                        ->options(function (callable $get) {
+                            return Employee::all()->pluck('user.name', 'id');
+                        })
+                    ->rules([
+                        function () {
+                            return function (string $attribute, $value, Closure $fail) {
+                                $today_attendance = (new Leave())->query()->where('employee_id', $value)->where('status', 'active')->first();
+                                if ($today_attendance) {
+                                    Notification::make()->warning()
+                                        ->title('Employee already on leave.')
+                                        ->body(''.(Employee::where('id',$value)->first()->user->name).' already on leave.')->broadcast(Auth::user())->send();
+                                    $fail('This :attribute is already on leave.');
+                                }
+                            };
+                        },
+                    ])
+                    ->searchable()
+                    ->reactive()
+                    ->required(),
                 Forms\Components\TextInput::make('type')
                     ->required(),
                 Forms\Components\DatePicker::make('start_date')
