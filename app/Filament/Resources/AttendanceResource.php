@@ -32,27 +32,30 @@ class AttendanceResource extends Resource
                     ->options(function (callable $get) {
                         return Employee::all()->pluck('user.name', 'id');
                     })
-                    ->rules([
-                        function () {
-                            return function (string $attribute, $value, Closure $fail) {
-                                $today_attendance = (new Attendance())->query()->where('employee_id', $value)->whereBetween('date', [now()->startOfDay(), now()->endOfDay()])->first();
-                                if ($today_attendance) {
-                                    Notification::make()->warning()
-                                        ->title('Employee already attendance today')
-                                        ->body(''.(Employee::where('id',$value)->first()->user->name).' already checked in today.')->broadcast(Auth::user())->send();
-                                    $fail('This :attribute is already checked in today.');
-                                }
-                            };
-                        },
-                    ])
+//                    ->rules([
+//                        function () {
+//                            return function (string $attribute, $value, Closure $fail) {
+//                                $today_attendance = (new Attendance())->query()->where('employee_id', $value)->whereBetween('date', [now()->startOfDay(), now()->endOfDay()])->first();
+//                                if ($today_attendance) {
+//                                    Notification::make()->warning()
+//                                        ->title('Employee already checked in today')
+//                                        ->body(''.(Employee::where('id',$value)->first()->user->name).' already checked in today.')->broadcast(Auth::user())->send();
+//                                    $fail('This :attribute is already checked in today.');
+//                                }
+//                            };
+//                        },
+//                    ])
                     ->searchable()
                     ->reactive()
                     ->required(),
                 Forms\Components\DatePicker::make('date')
+                    ->reactive()
                     ->required(),
                 Forms\Components\TimePicker::make('check_in')
+                    ->reactive()
                     ->required(),
-                Forms\Components\TimePicker::make('check_out')->after('check_in'),
+                Forms\Components\TimePicker::make('check_out')
+                    ->reactive()->after('check-in'),
             ]);
     }
 
