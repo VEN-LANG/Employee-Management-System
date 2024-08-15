@@ -36,7 +36,7 @@ class AttendanceResource extends Resource
                     ->required(),
                 Forms\Components\TimePicker::make('check_in')
                     ->required(),
-                Forms\Components\TimePicker::make('check_out'),
+                Forms\Components\TimePicker::make('check_out')->after('check_in'),
             ]);
     }
 
