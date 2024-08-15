@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Filament\Forms;
 class Payroll extends Model
 {
     use HasFactory;
@@ -52,5 +52,49 @@ class Payroll extends Model
         static::saving(function ($payroll) {
             $payroll->calculateNetSalary();
         });
+    }
+
+    /**
+     * Resource form fields for payroll forms
+     * @return array
+     */
+    public static function resourceForm(): array
+    {
+        return[
+            Forms\Components\Select::make('employee_id')
+                ->label('Employee')
+                ->relationship('employee', 'user.name') // Assuming 'name' is the attribute you want to display
+                ->required()
+                ->options(function (callable $get) {
+                    return Employee::all()->pluck('user.name', 'id');
+                })
+                ->searchable()
+                ->reactive(),
+
+                Forms\Components\TextInput::make('basic_salary')
+                    ->label('Basic Salary')
+                    ->numeric()
+                    ->required(),
+
+                Forms\Components\TextInput::make('allowances')
+                    ->label('Allowances')
+                    ->numeric()
+                    ->default(0),
+
+                Forms\Components\TextInput::make('deductions')
+                    ->label('Deductions')
+                    ->numeric()
+                    ->default(0),
+
+                Forms\Components\TextInput::make('net_salary')
+                    ->label('Net Salary')
+                    ->numeric()
+                    ->disabled() // Disabled as it's auto-calculated
+                    ->required(),
+
+                Forms\Components\DatePicker::make('payment_date')
+                    ->label('Payment Date')
+                    ->required(),
+            ];
     }
 }
