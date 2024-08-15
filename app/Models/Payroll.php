@@ -100,6 +100,11 @@ class Payroll extends Model
             ];
     }
 
+    /**
+     * Function to get resource table from model
+     *
+     * @return array
+     */
     public static function resourceTable(): array
     {
         return [
