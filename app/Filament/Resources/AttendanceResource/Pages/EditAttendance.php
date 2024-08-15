@@ -4,6 +4,7 @@ namespace App\Filament\Resources\AttendanceResource\Pages;
 
 use App\Filament\Resources\AttendanceResource;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 
 class EditAttendance extends EditRecord
@@ -15,5 +16,18 @@ class EditAttendance extends EditRecord
         return [
             Actions\DeleteAction::make(),
         ];
+    }
+
+    protected function getSavedNotificationTitle(): ?string
+    {
+        return 'Attendance Updated!';
+    }
+
+    protected function getSavedNotification(): ?Notification
+    {
+        return Notification::make()
+            ->success()
+            ->title('Attendance Updated')
+            ->body('The attendance has been updated successfully.');
     }
 }
