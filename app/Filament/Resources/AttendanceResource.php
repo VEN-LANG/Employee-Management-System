@@ -34,9 +34,9 @@ class AttendanceResource extends Resource
                     ->required(),
                 Forms\Components\DatePicker::make('date')
                     ->required(),
-                Forms\Components\TextInput::make('check_in')
+                Forms\Components\TimePicker::make('check_in')
                     ->required(),
-                Forms\Components\TextInput::make('check_out'),
+                Forms\Components\TimePicker::make('check_out'),
             ]);
     }
 
@@ -44,7 +44,7 @@ class AttendanceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('employee.name')
+                Tables\Columns\TextColumn::make('employee.user.name')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('date')
                     ->date()
