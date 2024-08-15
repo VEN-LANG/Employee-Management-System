@@ -8,4 +8,31 @@ use Illuminate\Database\Eloquent\Model;
 class Department extends Model
 {
     use HasFactory;
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'location',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'name' => 'string',
+        'location' => 'string',
+    ];
+
+    /**
+     * Get the employees for the department.
+     */
+    public function employees()
+    {
+        return $this->hasMany(Employee::class);
+    }
 }
