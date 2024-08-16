@@ -9,6 +9,7 @@ use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
@@ -16,6 +17,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class UserResource extends Resource
 {
@@ -99,7 +101,19 @@ class UserResource extends Resource
                 ActionGroup::make([
                     // ...
                     Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\DeleteAction::make()
+                        ->before(function ($record) {
+                            $currentUser = Auth::user();
+                                if ($currentUser->getAuthIdentifier() == ($record->id)) {
+                                    Notification::make()
+                                        ->title('Action Not Allowed')
+                                        ->body('You cannot delete your own account.')
+                                        ->danger()
+                                        ->send();
+                                    return false;
+                                }
+                            return true;
+                        }),
                     Tables\Actions\RestoreAction::make(),
                     Tables\Actions\ViewAction::make(),
                 ])
