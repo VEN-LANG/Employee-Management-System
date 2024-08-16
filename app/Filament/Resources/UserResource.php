@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\UserExporter;
+use App\Filament\Imports\UserImporter;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
@@ -74,9 +76,13 @@ class UserResource extends Resource
                     Tables\Actions\RestoreBulkAction::make(),
                     Tables\Actions\DetachBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\ExportBulkAction::make(),
+                    Tables\Actions\ExportBulkAction::make()->exporter(UserExporter::class),
                 ]),
-            ]);
+            ])->headerActions(
+                [
+                    Tables\Actions\ImportAction::make()->importer(UserImporter::class)
+                ]
+            );
     }
 
     public static function getRelations(): array
