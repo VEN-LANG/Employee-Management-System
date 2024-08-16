@@ -14,6 +14,7 @@ class UsersOverview extends BaseWidget
         return [
             //
             Stat::make('Number of Users', User::query()->count())->description('All Users registered on this Application')->icon('heroicon-o-user'),
+            Stat::make('Number of Employees', Employee::query()->count())->description('All Employees on this Application')->icon('heroicon-m-user-group')
         ];
     }
 }
