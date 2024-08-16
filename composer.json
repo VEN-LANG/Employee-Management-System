@@ -12,6 +12,7 @@
         "codeat3/blade-pepicons": "^1.5",
         "doctrine/dbal": "^4.1",
         "filament/filament": "^3.2",
+        "flowframe/laravel-trend": "^0.2.0",
         "joaopaulolndev/filament-edit-profile": "^1.0",
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
