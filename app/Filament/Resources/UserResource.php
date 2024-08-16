@@ -11,6 +11,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -65,10 +66,16 @@ class UserResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    // ...
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\RestoreAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
+                    ->button()
+                    ->label('')
+                ->icon('heroicon-c-adjustments-horizontal')
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -80,7 +87,8 @@ class UserResource extends Resource
                 ]),
             ])->headerActions(
                 [
-                    Tables\Actions\ImportAction::make()->importer(UserImporter::class)
+                    Tables\Actions\ImportAction::make()->importer(UserImporter::class),
+                    Tables\Actions\ExportAction::make()->exporter(UserExporter::class),
                 ]
             );
     }
