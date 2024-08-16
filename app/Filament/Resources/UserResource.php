@@ -102,17 +102,21 @@ class UserResource extends Resource
                     // ...
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make()
-                        ->before(function ($record) {
+                        ->before(function ($record, $action) {
                             $currentUser = Auth::user();
-                                if ($currentUser->getAuthIdentifier() == ($record->id)) {
+                                if ($currentUser->id == $record->id) {
                                     Notification::make()
                                         ->title('Action Not Allowed')
                                         ->body('You cannot delete your own account.')
                                         ->danger()
                                         ->send();
-                                    return false;
+                                    $action->cancel();
                                 }
-                            return true;
+                            Notification::make()
+                                ->title('Success')
+                                ->body('Account Deleted.')
+                                ->danger()
+                                ->send();
                         }),
                     Tables\Actions\RestoreAction::make(),
                     Tables\Actions\ViewAction::make(),
