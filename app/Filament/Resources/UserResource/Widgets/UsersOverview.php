@@ -13,7 +13,7 @@ class UsersOverview extends BaseWidget
     {
         return [
             //
-
+            Stat::make('Number of Users', User::query()->count())->description('All Users registered on this Application')->icon('heroicon-o-user'),
         ];
     }
 }
