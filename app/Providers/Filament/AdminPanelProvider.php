@@ -80,7 +80,7 @@ class AdminPanelProvider extends PanelProvider
                     ->shouldShowBrowserSessionsForm()
                     ->shouldShowAvatarForm(),
                 FilamentApexChartsPlugin::make(),
-            ])
+            ])->databaseNotifications()
             ->authMiddleware([
                 Authenticate::class,
             ])->spa();
