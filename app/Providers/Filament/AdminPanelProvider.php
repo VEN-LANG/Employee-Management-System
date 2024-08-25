@@ -61,6 +61,9 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                \Hasnayeen\Themes\Http\Middleware\SetTheme::class
+            ])->tenantMiddleware([
+                \Hasnayeen\Themes\Http\Middleware\SetTheme::class
             ])->plugins([
                 FilamentEditProfilePlugin::make()
                     ->slug('my-profile')
@@ -80,9 +83,10 @@ class AdminPanelProvider extends PanelProvider
                     ->shouldShowBrowserSessionsForm()
                     ->shouldShowAvatarForm(),
                 FilamentApexChartsPlugin::make(),
+                \Hasnayeen\Themes\ThemesPlugin::make()->canViewThemesPage(fn() => true),
             ])->databaseNotifications()
             ->authMiddleware([
                 Authenticate::class,
-            ])->spa();
+            ])->spa()->viteTheme('resources/css/filament/admin/theme.css');
     }
 }
