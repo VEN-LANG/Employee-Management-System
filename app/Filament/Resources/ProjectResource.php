@@ -55,6 +55,9 @@ class ProjectResource extends Resource
                 Tables\Columns\TextColumn::make('end_date')
                     ->date()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->sortable()
+                ,
                 Tables\Columns\TextColumn::make('department.name')
                     ->numeric()
                     ->sortable(),
