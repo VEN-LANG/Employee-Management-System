@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('projects', function (Blueprint $table) {
             //
-            $table->boolean('status')->default('Pending');
+            $table->string('status')->default('Pending');
         });
     }
 
