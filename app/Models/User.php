@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,7 +13,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable implements HasAvatar
+class User extends Authenticatable implements HasAvatar, FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable, softDeletes;
 
@@ -68,5 +69,10 @@ class User extends Authenticatable implements HasAvatar
     public function getFilamentAvatarUrl(): ?string
     {
         return $this->avatar_url ? Storage::url("$this->avatar_url") : null;
+    }
+
+    public function canAccessPanel(\Filament\Panel $panel): bool
+    {
+        return true;
     }
 }
